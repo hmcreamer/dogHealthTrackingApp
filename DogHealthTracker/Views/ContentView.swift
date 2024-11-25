@@ -15,9 +15,10 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Dog.name, ascending: true)],
         animation: .default)
     private var dogs: FetchedResults<Dog>
+    @State private var isAddingDogProfile = false
 
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             List {
                 ForEach(dogs) { dog in
                     NavigationLink {
@@ -28,32 +29,24 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteDog)
             }
+            .navigationTitle("Dog Profiles")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addDog) {
+                    Button(action: {
+                        isAddingDogProfile.toggle()
+                    }) {
                         Label("Add Dog", systemImage: "plus")
                     }
                 }
             }
-            Text("Select a dog")
-        }
-    }
-
-    private func addDog() {
-        withAnimation {
-            let newDog = Dog(context: viewContext)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            .sheet(isPresented: $isAddingDogProfile) {
+                AddDogFormView(isPresented: $isAddingDogProfile)
             }
+        } detail: {
+            Text("Select a dog")
         }
     }
 
