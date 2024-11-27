@@ -21,9 +21,40 @@ struct HomePageView: View {
             List {
                 ForEach(dogs) { dog in
                     NavigationLink {
-                        Text("\(dog.name!)")
+                        VStack {
+                            if let dogPhoto = dog.photo,
+                               let uiImage = UIImage(data: dogPhoto) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 200)
+                                    .cornerRadius(8)
+                            } else {
+                                Text("No Image")
+                                    .foregroundColor(.secondary)
+                            }
+                            Text("\(dog.name!)")
+                        }
                     } label: {
-                        Text(dog.name!)
+                        HStack {
+                            if let dogPhoto = dog.photo,
+                               let uiImage = UIImage(data: dogPhoto) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                                    .shadow(radius: 2)
+                            } else {
+                                Circle()
+                                    .fill(Color.gray.opacity(0.5))
+                                    .frame(width: 50, height: 50)
+                                    .overlay(Text("No Image").font(.caption).foregroundColor(.white))
+                            }
+                            Text(dog.name!)
+                                .font(.headline)
+                        }
                     }
                 }
                 .onDelete(perform: deleteDog)
@@ -56,14 +87,12 @@ struct HomePageView: View {
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                print("Failed to save dog: \(error.localizedDescription)")
             }
         }
     }
 }
+
 
 #Preview {
     HomePageView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
