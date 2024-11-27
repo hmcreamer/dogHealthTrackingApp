@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct AddDogFormView: View {
     @Binding var isPresented: Bool // Binding to dismiss the form
@@ -14,6 +15,8 @@ struct AddDogFormView: View {
     @State private var weight: Int? = nil
     @State private var birthday: Date = Date()
     @State private var lastVetVisit: Date = Date()
+    @State private var selectedImage: UIImage? = nil // Store the selected image
+    @State private var selectedItem: PhotosPickerItem? = nil // For binding the picker selection
     
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -26,6 +29,30 @@ struct AddDogFormView: View {
                         .keyboardType(.numberPad)
                     DatePicker("Birthday", selection: $birthday, displayedComponents: .date)
                     DatePicker("Date of Last Vet Visit", selection: $lastVetVisit, displayedComponents: .date)
+                }
+                
+                Section(header: Text("Dog Photo")) {
+                    if let selectedImage = selectedImage {
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 200) // Display selected image
+                            .cornerRadius(8)
+                    } else {
+                        Text("No photo selected")
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    // Add the PhotosPicker
+                    PhotosPicker("Select Photo", selection: $selectedItem, matching: .images)
+                        .onChange(of: selectedItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                                   let image = UIImage(data: data) {
+                                    selectedImage = image // Set the selected image
+                                }
+                            }
+                        }
                 }
             }
             .navigationTitle("Add New Dog")
@@ -54,6 +81,9 @@ struct AddDogFormView: View {
         newDog.weight = Int32(weight ?? 0)
         newDog.birthday = birthday // Convert Int? to Int16
         newDog.lastVetVisit = lastVetVisit
+        if let selectedImage = selectedImage {
+            newDog.photo = selectedImage.jpegData(compressionQuality: 0.8) // Save the photo as Data
+        }
         
         do {
             try viewContext.save() // Save the object to Core Data
