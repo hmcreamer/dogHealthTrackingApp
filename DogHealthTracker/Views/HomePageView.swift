@@ -22,18 +22,7 @@ struct HomePageView: View {
                 ForEach(dogs) { dog in
                     NavigationLink {
                         VStack {
-                            if let dogPhoto = dog.photo,
-                               let uiImage = UIImage(data: dogPhoto) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 200)
-                                    .cornerRadius(8)
-                            } else {
-                                Text("No Image")
-                                    .foregroundColor(.secondary)
-                            }
-                            Text("\(dog.name!)")
+                            DogProfileView(dog: dog)
                         }
                     } label: {
                         HStack {
