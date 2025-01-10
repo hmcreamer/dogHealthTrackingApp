@@ -17,7 +17,7 @@ struct HomePageView: View {
     @State private var isAddingDogProfile = false
 
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
                 ForEach(dogs) { dog in
                     NavigationLink {
@@ -64,8 +64,6 @@ struct HomePageView: View {
             .sheet(isPresented: $isAddingDogProfile) {
                 AddDogFormView(isPresented: $isAddingDogProfile)
             }
-        } detail: {
-            Text("Select a dog")
         }
     }
 

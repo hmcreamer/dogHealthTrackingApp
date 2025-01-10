@@ -41,7 +41,7 @@ struct DogProfileView: View {
                                 .font(.headline)
                         )
                 }
-
+                
                 // Photos Picker to Update Photo
                 PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                     Text("Edit Photo")
@@ -57,19 +57,19 @@ struct DogProfileView: View {
                         }
                     }
                 }
-
+                
                 // Dog's Name
                 Text(dog.name ?? "Unknown Name")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-
+                
                 // Dog Profile Information Section
                 VStack(alignment: .leading, spacing: 15) {
                     Text("About")
                         .font(.headline)
                     
                     Divider()
-
+                    
                     // Birthday Field
                     HStack {
                         Text("Birthday:")
@@ -88,7 +88,7 @@ struct DogProfileView: View {
                         )
                         .labelsHidden()
                     }
-
+                    
                     // Weight Field
                     HStack {
                         Text("Weight (lbs):")
@@ -107,7 +107,7 @@ struct DogProfileView: View {
                         .multilineTextAlignment(.trailing)
                         .frame(width: 100)
                     }
-
+                    
                     // Last Vet Visit Field
                     HStack {
                         Text("Last Vet Visit:")
@@ -126,7 +126,7 @@ struct DogProfileView: View {
                         )
                         .labelsHidden()
                     }
-
+                    
                     // Dog's Age
                     HStack {
                         Text("Age:")
@@ -140,8 +140,21 @@ struct DogProfileView: View {
                 .background(Color(.systemGroupedBackground))
                 .cornerRadius(10)
                 .padding(.horizontal)
-
+                
                 Spacer()
+                
+                
+                // Navigation Button to Medical Records
+                NavigationLink(destination: MedicalRecordsView(dog: dog)) {
+                    Text("View Medical Records")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
             }
             .padding()
             .navigationTitle(dog.name ?? "Dog Profile")
@@ -210,6 +223,16 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
        let imageData = image.jpegData(compressionQuality: 0.8) {
         dog.photo = imageData
     }
+    
+    let pdfDoc = PDFDoc(context: context)
+    pdfDoc.title = "Sample Medical Record"
+    pdfDoc.dog = dog
+
+    // Get the URL of the Sample2.pdf file from the app's bundle
+    if let samplePDFURL = Bundle.main.url(forResource: "Sample2", withExtension: "pdf") {
+        pdfDoc.url = samplePDFURL.absoluteString
+    }
+    try? context.save()
 
     return dog
 }

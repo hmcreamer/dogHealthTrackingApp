@@ -30,19 +30,34 @@ struct MedicalRecordsView: View {
 
     var body: some View {
         NavigationView {
-            List {
-                ForEach(pdfDocs) { pdfDoc in
-                    NavigationLink {
-                        if let urlString = pdfDoc.url, let pdfURL = URL(string: urlString) {
-                            PDFViewer(pdfURL: pdfURL)
-                        } else {
-                            Text("Invalid PDF URL")
-                        }
-                    } label: {
-                        Text(pdfDoc.title ?? "Untitled")
-                    }
+            VStack {
+            if pdfDocs.isEmpty {
+                VStack {
+                    Text("No Medical Records")
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    Text("Tap '+' to add a new medical record.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
                 }
-                .onDelete(perform: deletePDF)
+                .padding()
+            } else {
+                List {
+                    ForEach(pdfDocs) { pdfDoc in
+                        NavigationLink {
+                            if let urlString = pdfDoc.url, let pdfURL = URL(string: urlString) {
+                                PDFViewer(pdfURL: pdfURL)
+                            } else {
+                                Text("Invalid PDF URL")
+                            }
+                        } label: {
+                            Text(pdfDoc.title ?? "Untitled")
+                        }
+                    }
+                    .onDelete(perform: deletePDF)
+                }
+            }
             }
             .navigationTitle("Medical Records")
             .toolbar {
