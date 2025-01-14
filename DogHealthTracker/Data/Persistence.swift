@@ -28,6 +28,14 @@ struct PersistenceController {
         let pdfDoc = PDFDoc(context: viewContext)
         pdfDoc.title = "Sample Medical Record"
         pdfDoc.dog = newDog
+        
+        let event1 = MedicalEvent(context: viewContext)
+        event1.eventDescription = "Rabies Vaccine"
+        event1.occurrenceDate = Date()
+        event1.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+        event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+        event1.typeData = "Vaccine"
+        event1.dog = newDog
 
         // Get the URL of the Sample2.pdf file from the app's bundle
         if let samplePDFURL = Bundle.main.url(forResource: "Sample2", withExtension: "pdf") {
