@@ -9,12 +9,12 @@
         <relationship name="docs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PDFDoc" inverseName="dog" inverseEntity="PDFDoc"/>
         <relationship name="medicalEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MedicalEvent" inverseName="dog" inverseEntity="MedicalEvent"/>
     </entity>
-    <entity name="MedicalEvent" representedClassName="MedicalEvent" syncable="YES">
+    <entity name="MedicalEvent" representedClassName="MedicalEvent" syncable="YES" codeGenerationType="class">
         <attribute name="eventDescription" optional="YES" attributeType="String"/>
         <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="occurrenceDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="reminderDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="type" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="dog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Dog" inverseName="medicalEvents" inverseEntity="Dog"/>
     </entity>
     <entity name="PDFDoc" representedClassName="PDFDoc" syncable="YES" codeGenerationType="class">
