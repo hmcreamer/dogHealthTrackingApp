@@ -41,12 +41,11 @@ struct AddMedicalEventView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
-                if selectedType == "Vaccine" || selectedType == "Heartworm Treatment" || selectedType == "Flea Treatment" {
-                    Section(header: Text("Additional Information")) {
-                        DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: .date)
-                        DatePicker("Reminder Date", selection: $reminderDate, displayedComponents: .date)
-                    }
+                Section(header: Text("Future Considerations")) {
+                    DatePicker("Renewal Date", selection: $expirationDate, displayedComponents: .date)
+                    DatePicker("Reminder Date", selection: $reminderDate, displayedComponents: .date)
                 }
+                
             }
             .navigationTitle("Add New Medical Event")
             .toolbar {
@@ -69,15 +68,8 @@ struct AddMedicalEventView: View {
         newEvent.type = selectedType
         newEvent.eventDescription = eventDescription
         newEvent.occurrenceDate = occurrenceDate
-
-        // Set expirationDate and reminderDate based on type
-        if selectedType == "Vaccine" || selectedType == "Heartworm Treatment" || selectedType == "Flea Treatment" {
-            newEvent.expirationDate = expirationDate
-            newEvent.reminderDate = reminderDate
-        } else {
-            newEvent.expirationDate = occurrenceDate
-            newEvent.reminderDate = occurrenceDate
-        }
+        newEvent.expirationDate = expirationDate
+        newEvent.reminderDate = reminderDate
 
         newEvent.dog = dog
 
