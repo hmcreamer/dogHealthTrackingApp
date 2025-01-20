@@ -38,13 +38,8 @@ struct DogProfileView: View {
             VStack(spacing: 20) {
                 // Dog's Photo
                 if let dogPhoto = tempPhoto ?? dog.photo.flatMap({ UIImage(data: $0) }) {
-                    Image(uiImage: dogPhoto)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                        .shadow(radius: 5)
+                    CircleImage(uiImage: dogPhoto)
+                        .frame(width: 250, height: 250)
                 } else {
                     Circle()
                         .fill(Color.gray.opacity(0.5))

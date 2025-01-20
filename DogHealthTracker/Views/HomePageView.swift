@@ -32,9 +32,7 @@ struct HomePageView: View {
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-                                    .shadow(radius: 2)
+
                             } else {
                                 Circle()
                                     .fill(Color.gray.opacity(0.5))
