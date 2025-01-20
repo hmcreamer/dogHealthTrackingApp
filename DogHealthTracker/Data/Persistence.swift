@@ -32,6 +32,30 @@ struct PersistenceController {
          event1.type = "Vaccine"
          event1.dog = newDog
         
+        let event2 = MedicalEvent(context: viewContext)
+         event2.eventDescription = "Checkup"
+         event2.occurrenceDate = Date()
+         event2.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+         event2.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+         event2.type = "Vet Visit"
+         event2.dog = newDog
+        
+        let event3 = MedicalEvent(context: viewContext)
+         event3.eventDescription = "Yummy heartworm"
+         event3.occurrenceDate = Date()
+         event3.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+         event3.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+         event3.type = "Heartworm Treatment"
+         event3.dog = newDog
+        
+        let event4 = MedicalEvent(context: viewContext)
+         event4.eventDescription = "Flea meds"
+         event4.occurrenceDate = Date()
+         event4.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+         event4.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+         event4.type = "Flea Treatment"
+         event4.dog = newDog
+        
         let pdfDoc = PDFDoc(context: viewContext)
         pdfDoc.title = "Sample Medical Record"
         pdfDoc.dog = newDog

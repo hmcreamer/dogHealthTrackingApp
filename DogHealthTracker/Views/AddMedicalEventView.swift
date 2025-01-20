@@ -80,6 +80,7 @@ struct AddMedicalEventView: View {
             print("Failed to save MedicalEvent: \(error.localizedDescription)")
         }
     }
+    
 }
 
 #Preview {

@@ -144,7 +144,55 @@ struct DogProfileView: View {
                 .background(Color(.systemGroupedBackground))
                 .cornerRadius(10)
                 .padding(.horizontal)
-                
+                                
+                // Treatment Information Section
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("Treatment Information")
+                        .font(.headline)
+                    
+                    Divider()
+                    
+                    // Table headers
+                    HStack {
+                        Text("Type")
+                            .fontWeight(.bold)
+                        Spacer()
+                        Text("Renewal Date")
+                            .fontWeight(.bold)
+                    }
+                    .padding(.bottom, 5)
+                    
+                    // Flea Treatment Row
+                    HStack {
+                        Text("Flea Treatment")
+                        Spacer()
+                        if let fleaTreatment = fetchMostRecentMedicalEvent(ofType: "Flea Treatment") {
+                            Text(DateFormatter.localizedString(from: fleaTreatment.expirationDate ?? Date(), dateStyle: .medium, timeStyle: .none))
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text("No data")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    // Heartworm Treatment Row
+                    HStack {
+                        Text("Heartworm Treatment")
+                        Spacer()
+                        if let heartwormTreatment = fetchMostRecentMedicalEvent(ofType: "Heartworm Treatment") {
+                            Text(DateFormatter.localizedString(from: heartwormTreatment.expirationDate ?? Date(), dateStyle: .medium, timeStyle: .none))
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text("No data")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                .padding()
+                .background(Color(.systemGroupedBackground))
+                .cornerRadius(10)
+                .padding(.horizontal)
+
                 Spacer()
                 
                 // Navigation Button to Medical Events
@@ -177,6 +225,21 @@ struct DogProfileView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
+    private func fetchMostRecentMedicalEvent(ofType type: String) -> MedicalEvent? {
+        let fetchRequest: NSFetchRequest<MedicalEvent> = MedicalEvent.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "dog == %@ AND type == %@", dog, type)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "occurrenceDate", ascending: false)]
+        fetchRequest.fetchLimit = 1
+        
+        do {
+            return try viewContext.fetch(fetchRequest).first
+        } catch {
+            print("Error fetching \(type) events: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
 
     // Save profile info changes to Core Data
     private func saveChanges() {
@@ -258,6 +321,22 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
      event2.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
      event2.type = "Vet Visit"
      event2.dog = dog
+    
+    let event3 = MedicalEvent(context: context)
+     event3.eventDescription = "Yummy heartworm"
+     event3.occurrenceDate = Date()
+     event3.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+     event3.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+     event3.type = "Heartworm Treatment"
+     event3.dog = dog
+    
+    let event4 = MedicalEvent(context: context)
+     event4.eventDescription = "Flea meds"
+     event4.occurrenceDate = Date()
+     event4.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+     event4.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+     event4.type = "Flea Treatment"
+     event4.dog = dog
 
     // Get the URL of the Sample2.pdf file from the app's bundle
     if let samplePDFURL = Bundle.main.url(forResource: "Sample2", withExtension: "pdf") {
