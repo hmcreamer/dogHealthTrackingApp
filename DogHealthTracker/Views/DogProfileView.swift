@@ -17,7 +17,21 @@ struct DogProfileView: View {
     @State private var tempPhoto: UIImage? = nil
     @State private var birthday: Date? = nil
     @State private var weight: Int? = nil
-    @State private var lastVetVisit: Date? = nil
+    private var lastVetVisit: Date? {
+        let fetchRequest: NSFetchRequest<MedicalEvent> = MedicalEvent.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "dog == %@ AND type == %@", dog, "Vet Visit")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "occurrenceDate", ascending: false)]
+        fetchRequest.fetchLimit = 1
+
+        do {
+            if let mostRecentEvent = try viewContext.fetch(fetchRequest).first {
+                return mostRecentEvent.occurrenceDate
+            }
+        } catch {
+            print("Error fetching vet visits: \(error.localizedDescription)")
+        }
+        return nil
+    }
 
     var body: some View {
         ScrollView {
@@ -113,18 +127,13 @@ struct DogProfileView: View {
                         Text("Last Vet Visit:")
                             .fontWeight(.bold)
                         Spacer()
-                        DatePicker(
-                            "",
-                            selection: Binding(
-                                get: { dog.lastVetVisit ?? Date() },
-                                set: { newValue in
-                                    dog.lastVetVisit = newValue
-                                    saveChanges()
-                                }
-                            ),
-                            displayedComponents: .date
-                        )
-                        .labelsHidden()
+                        if let lastVisit = lastVetVisit {
+                            Text(DateFormatter.localizedString(from: lastVisit, dateStyle: .medium, timeStyle: .none))
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text("No visits recorded")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     
                     // Dog's Age
@@ -230,7 +239,6 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
     dog.name = "Layla"
     dog.birthday = Calendar.current.date(byAdding: .year, value: -5, to: Date())
     dog.weight = Int32(25)
-    dog.lastVetVisit = Calendar.current.date(byAdding: .month, value: -2, to: Date())
     if let image = UIImage(named: "laylaBed"),
        let imageData = image.jpegData(compressionQuality: 0.8) {
         dog.photo = imageData
@@ -247,6 +255,14 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
      event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
      event1.type = "Vaccine"
      event1.dog = dog
+    
+    let event2 = MedicalEvent(context: context)
+     event2.eventDescription = "Checkup"
+     event2.occurrenceDate = Date()
+     event2.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+     event2.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+     event2.type = "Vet Visit"
+     event2.dog = dog
 
     // Get the URL of the Sample2.pdf file from the app's bundle
     if let samplePDFURL = Bundle.main.url(forResource: "Sample2", withExtension: "pdf") {
