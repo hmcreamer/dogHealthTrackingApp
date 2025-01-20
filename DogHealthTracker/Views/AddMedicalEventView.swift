@@ -20,7 +20,9 @@ struct AddMedicalEventView: View {
     @State private var eventDescription: String = ""
     @State private var expirationDate: Date = Date()
     @State private var reminderDate: Date = Date()
-
+    @State private var selectedVaccineType: String = "Rabies"
+    
+    private let vaccineTypes = ["Rabies", "Distemper", "Hepatitis/Adenovirus", "Parvovirus", "Parainfluenza", "Bordetella", "Leptospirosis", "Lyme Disease", "Rattlesnake", "Other"]
     private let eventTypes = ["Vaccine", "Heartworm Treatment", "Flea Treatment", "Vet Visit", "Other"]
 
     var body: some View {
@@ -33,7 +35,18 @@ struct AddMedicalEventView: View {
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
+
+                    // Conditionally display the Vaccine Type picker
+                    if selectedType == "Vaccine" {
+                        Picker("Vaccine Type", selection: $selectedVaccineType) {
+                            ForEach(vaccineTypes, id: \.self) { type in
+                                Text(type)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                    }
                 }
+
 
                 Section(header: Text("Event Details")) {
                     DatePicker("Occurrence Date", selection: $occurrenceDate, displayedComponents: .date)
@@ -70,7 +83,12 @@ struct AddMedicalEventView: View {
         newEvent.occurrenceDate = occurrenceDate
         newEvent.expirationDate = expirationDate
         newEvent.reminderDate = reminderDate
-
+        
+        // Save vaccine type to the name attribute if event type is Vaccine
+        if selectedType == "Vaccine" {
+            newEvent.name = selectedVaccineType
+        }
+        
         newEvent.dog = dog
 
         do {
