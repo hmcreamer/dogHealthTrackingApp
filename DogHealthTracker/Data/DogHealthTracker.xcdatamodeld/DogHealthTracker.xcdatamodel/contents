@@ -11,6 +11,7 @@
     <entity name="MedicalEvent" representedClassName="MedicalEvent" syncable="YES" codeGenerationType="class">
         <attribute name="eventDescription" optional="YES" attributeType="String"/>
         <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="occurrenceDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="reminderDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="String"/>
