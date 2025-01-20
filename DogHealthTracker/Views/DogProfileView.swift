@@ -143,6 +143,17 @@ struct DogProfileView: View {
                 
                 Spacer()
                 
+                // Navigation Button to Medical Events
+                NavigationLink(destination: MedicalEventsView(dog: dog)) {
+                    Text("View Medical History")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
                 
                 // Navigation Button to Medical Records
                 NavigationLink(destination: MedicalRecordsView(dog: dog)) {
@@ -155,6 +166,7 @@ struct DogProfileView: View {
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
+                
             }
             .padding()
             .navigationTitle(dog.name ?? "Dog Profile")
@@ -227,6 +239,14 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
     let pdfDoc = PDFDoc(context: context)
     pdfDoc.title = "Sample Medical Record"
     pdfDoc.dog = dog
+    
+    let event1 = MedicalEvent(context: context)
+     event1.eventDescription = "Rabies Vaccine"
+     event1.occurrenceDate = Date()
+     event1.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+     event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+     event1.type = "Vaccine"
+     event1.dog = dog
 
     // Get the URL of the Sample2.pdf file from the app's bundle
     if let samplePDFURL = Bundle.main.url(forResource: "Sample2", withExtension: "pdf") {

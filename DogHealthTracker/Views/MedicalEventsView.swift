@@ -30,7 +30,7 @@ struct MedicalEventsView: View {
             VStack {
                 if medicalEvents.isEmpty {
                     VStack {
-                        Text("No Medical Events")
+                        Text("No Medical History")
                             .font(.headline)
                             .foregroundColor(.secondary)
                         Text("Tap '+' to add a new medical event.")
@@ -70,7 +70,7 @@ struct MedicalEventsView: View {
                     }
                 }
             }
-            .navigationTitle("Medical Events")
+            .navigationTitle("Medical History")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
