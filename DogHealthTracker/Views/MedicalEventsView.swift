@@ -26,7 +26,7 @@ struct MedicalEventsView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack {
                 if medicalEvents.isEmpty {
                     VStack {
