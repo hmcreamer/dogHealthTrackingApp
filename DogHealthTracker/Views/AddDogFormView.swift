@@ -14,7 +14,6 @@ struct AddDogFormView: View {
     @State private var dogName: String = ""
     @State private var weight: Int? = nil
     @State private var birthday: Date = Date()
-    @State private var lastVetVisit: Date = Date()
     @State private var selectedImage: UIImage? = nil // Store the selected image
     @State private var selectedItem: PhotosPickerItem? = nil // For binding the picker selection
     
@@ -28,7 +27,6 @@ struct AddDogFormView: View {
                     TextField("Weight (lbs)", value: $weight, format: .number)
                         .keyboardType(.numberPad)
                     DatePicker("Birthday", selection: $birthday, displayedComponents: .date)
-                    DatePicker("Date of Last Vet Visit", selection: $lastVetVisit, displayedComponents: .date)
                 }
                 
                 Section(header: Text("Dog Photo")) {
@@ -66,7 +64,7 @@ struct AddDogFormView: View {
                     Button("Save") {
                         // Handle saving the new dog profile here
                         addDogProfile()
-                        print("Saved: \(dogName), \(weight ?? 0) \(birthday) \(lastVetVisit)")
+                        print("Saved: \(dogName), \(weight ?? 0) \(birthday)")
                         isPresented = false // Dismiss the form after saving
                     }
                     .disabled(dogName.isEmpty || weight == nil) // Disable if fields are empty
@@ -80,7 +78,6 @@ struct AddDogFormView: View {
         newDog.name = dogName
         newDog.weight = Int32(weight ?? 0)
         newDog.birthday = birthday // Convert Int? to Int16
-        newDog.lastVetVisit = lastVetVisit
         if let selectedImage = selectedImage {
             newDog.photo = selectedImage.jpegData(compressionQuality: 0.8) // Save the photo as Data
         }
