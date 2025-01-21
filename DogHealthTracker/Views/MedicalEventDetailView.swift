@@ -17,6 +17,9 @@ struct MedicalEventDetailView: View {
     @State private var editedEventDescription: String
     @State private var editedExpirationDate: Date
     @State private var editedReminderDate: Date
+    @State private var editedVaccineType: String = "Rabies"
+    
+    private let vaccineTypes = ["Rabies", "Distemper", "Hepatitis/Adenovirus", "Parvovirus", "Parainfluenza", "Bordetella", "Leptospirosis", "Lyme Disease", "Rattlesnake", "Other"]
 
     let medicalEvent: MedicalEvent
 
@@ -29,6 +32,8 @@ struct MedicalEventDetailView: View {
         _editedEventDescription = State(initialValue: medicalEvent.eventDescription ?? "")
         _editedExpirationDate = State(initialValue: medicalEvent.expirationDate ?? Date())
         _editedReminderDate = State(initialValue: medicalEvent.reminderDate ?? Date())
+        _editedVaccineType = State(initialValue: medicalEvent.type == "Vaccine" ? (medicalEvent.name ?? "") : "")
+
     }
 
     var body: some View {
@@ -43,6 +48,16 @@ struct MedicalEventDetailView: View {
                         Text("Other").tag("Other")
                     }
                     
+                    if editedType == "Vaccine" {
+                        Picker("Vaccine Type", selection: $editedVaccineType) {
+                            ForEach(vaccineTypes, id: \.self) { type in
+                                Text(type)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                    }
+
+                    
                     DatePicker("Occurrence Date", selection: $editedOccurrenceDate, displayedComponents: .date)
 
                     TextField("Description", text: $editedEventDescription)
@@ -52,6 +67,9 @@ struct MedicalEventDetailView: View {
 
                 } else {
                     DetailRow(title: "Type", value: medicalEvent.type ?? "")
+                    if medicalEvent.type == "Vaccine" {
+                        DetailRow(title: "Vaccine Type", value: medicalEvent.name ?? "")
+                    }
                     DetailRow(title: "Occurrence Date", value: formatDate(medicalEvent.occurrenceDate))
                     DetailRow(title: "Description", value: medicalEvent.eventDescription ?? "")
                     DetailRow(title: "Expiration Date", value: formatDate(medicalEvent.expirationDate))
@@ -83,6 +101,11 @@ struct MedicalEventDetailView: View {
         medicalEvent.eventDescription = editedEventDescription
         medicalEvent.expirationDate = editedExpirationDate
         medicalEvent.reminderDate = editedReminderDate
+        if editedType == "Vaccine" {
+            medicalEvent.name = editedVaccineType
+        } else {
+            medicalEvent.name = nil
+        }
 
         do {
             try viewContext.save()
@@ -135,10 +158,11 @@ struct DetailRow: View {
 // Helper function to create a preview Dog object
 private func createPreviewEvent(in context: NSManagedObjectContext) -> MedicalEvent {
     let event1 = MedicalEvent(context: context)
-     event1.eventDescription = "Rabies Vaccine"
+     event1.eventDescription = "Annual Rabies Shot"
      event1.occurrenceDate = Date()
      event1.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
      event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
      event1.type = "Vaccine"
+    event1.name = "Rabies"
     return event1
 }
