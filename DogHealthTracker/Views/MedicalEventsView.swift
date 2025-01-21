@@ -61,7 +61,7 @@ struct MedicalEventsView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     Text(event.type ?? "")
                                         .frame(maxWidth: .infinity, alignment: .center)
-                                    Text(event.eventDescription ?? "")
+                                    Text(event.type == "Vaccine" ? (event.name ?? "") : (event.eventDescription ?? ""))
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                             }
@@ -136,6 +136,7 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
      event1.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
      event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
      event1.type = "Vaccine"
+    event1.name = "Rabies"
      event1.dog = dog
 
     // Get the URL of the Sample2.pdf file from the app's bundle

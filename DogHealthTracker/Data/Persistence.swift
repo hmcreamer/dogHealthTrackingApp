@@ -30,6 +30,7 @@ struct PersistenceController {
          event1.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
          event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
          event1.type = "Vaccine"
+        event1.name = "Rabies"
          event1.dog = newDog
         
         let event2 = MedicalEvent(context: viewContext)
