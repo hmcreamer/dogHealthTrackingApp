@@ -187,6 +187,17 @@ struct DogProfileView: View {
                                 .foregroundColor(.secondary)
                         }
                     }
+                    
+                    // Vaccine Rows
+                    ForEach(fetchUniqueVaccinesSortedByExpirationDate(), id: \.self) { vaccine in
+                        HStack {
+                            Text("\(vaccine.name ?? "Unknown") Vaccine")
+                            Spacer()
+                            Text(DateFormatter.localizedString(from: vaccine.expirationDate ?? Date(), dateStyle: .medium, timeStyle: .none))
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
                 }
                 .padding()
                 .background(Color(.systemGroupedBackground))
@@ -239,6 +250,36 @@ struct DogProfileView: View {
             return nil
         }
     }
+    
+    private func fetchUniqueVaccinesSortedByExpirationDate() -> [MedicalEvent] {
+        let fetchRequest: NSFetchRequest<MedicalEvent> = MedicalEvent.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "dog == %@ AND type == %@", dog, "Vaccine")
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "name", ascending: true),
+            NSSortDescriptor(key: "occurrenceDate", ascending: false)
+        ]
+
+        do {
+            let allVaccines = try viewContext.fetch(fetchRequest)
+
+            // Filter for the most recent vaccine for each vaccine type
+            var uniqueVaccines: [String: MedicalEvent] = [:]
+            for vaccine in allVaccines {
+                if uniqueVaccines[vaccine.name ?? ""] == nil {
+                    uniqueVaccines[vaccine.name ?? ""] = vaccine
+                }
+            }
+
+            // Return vaccines sorted by expirationDate
+            return uniqueVaccines.values.sorted {
+                ($0.expirationDate ?? Date.distantFuture) < ($1.expirationDate ?? Date.distantFuture)
+            }
+        } catch {
+            print("Error fetching vaccines: \(error.localizedDescription)")
+            return []
+        }
+    }
+
 
 
     // Save profile info changes to Core Data
@@ -312,7 +353,26 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
      event1.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
      event1.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
      event1.type = "Vaccine"
+     event1.name = "Rabies"
      event1.dog = dog
+    
+    let event1a = MedicalEvent(context: context)
+     event1a.eventDescription = "Other Rabies Vaccine"
+     event1a.occurrenceDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+     event1a.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: event1a.occurrenceDate ?? Date())
+     event1a.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+     event1a.type = "Vaccine"
+     event1a.name = "Rabies"
+     event1a.dog = dog
+    
+    let event1b = MedicalEvent(context: context)
+     event1b.eventDescription = "Other Rabies Vaccine"
+     event1b.occurrenceDate = Calendar.current.date(byAdding: .day, value: -5, to: Date())
+     event1b.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: event1b.occurrenceDate ?? Date())
+     event1b.reminderDate = Calendar.current.date(byAdding: .month, value: 11, to: Date())
+     event1b.type = "Vaccine"
+     event1b.name = "Parvovirus"
+     event1b.dog = dog
     
     let event2 = MedicalEvent(context: context)
      event2.eventDescription = "Checkup"
