@@ -47,6 +47,7 @@ struct MedicalEventDetailView: View {
                         Text("Vet Visit").tag("Vet Visit")
                         Text("Other").tag("Other")
                     }
+                    .pickerStyle(MenuPickerStyle())
                     
                     if editedType == "Vaccine" {
                         Picker("Vaccine Type", selection: $editedVaccineType) {
