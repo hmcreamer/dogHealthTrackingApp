@@ -46,10 +46,11 @@ struct MedicalRecordsView: View {
                 List {
                     ForEach(pdfDocs) { pdfDoc in
                         NavigationLink {
-                            if let urlString = pdfDoc.url, let pdfURL = URL(string: urlString) {
+                            if let urlString = pdfDoc.url, let pdfURL = URL(string: urlString), FileManager.default.fileExists(atPath: pdfURL.path) {
                                 PDFViewer(pdfURL: pdfURL)
                             } else {
-                                Text("Invalid PDF URL")
+                                Text("Failed to load PDF")
+                                    .foregroundColor(.red)
                             }
                         } label: {
                             Text(pdfDoc.title ?? "Untitled")
@@ -57,6 +58,8 @@ struct MedicalRecordsView: View {
                     }
                     .onDelete(perform: deletePDF)
                 }
+
+
             }
             }
             .navigationTitle("Medical Records")
@@ -73,12 +76,31 @@ struct MedicalRecordsView: View {
                 }
             }
             .sheet(isPresented: $isAddingPDF) {
-                PDFPicker { pickedURL in
-                    if let pickedURL = pickedURL {
-                        savePDF(url: pickedURL)
+                VStack(spacing: 20) {
+                    Text("Add New Medical Record")
+                        .font(.headline)
+                    
+                    TextField("Enter title for the PDF", text: $newPDFTitle)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
+                    
+                    PDFPicker { pickedURL in
+                        if let pickedURL = pickedURL {
+                            savePDF(url: pickedURL)
+                            newPDFTitle = "" // Reset the title field
+                            isAddingPDF = false // Dismiss the sheet
+                        }
                     }
+                    
+                    Button("Cancel") {
+                        isAddingPDF = false
+                        newPDFTitle = "" // Reset the title field
+                    }
+                    .foregroundColor(.red)
                 }
+                .padding()
             }
+
         }
     }
 
@@ -94,17 +116,28 @@ struct MedicalRecordsView: View {
     }
 
     private func savePDF(url: URL) {
-        let newPDF = PDFDoc(context: viewContext)
-        newPDF.title = newPDFTitle.isEmpty ? "Untitled" : newPDFTitle
-        newPDF.url = url.absoluteString
-        newPDF.dog = dog
-
+        let destinationURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(url.lastPathComponent)
         do {
+            if !FileManager.default.fileExists(atPath: destinationURL.path) {
+                try FileManager.default.copyItem(at: url, to: destinationURL)
+            }
+            let newPDF = PDFDoc(context: viewContext)
+            newPDF.title = newPDFTitle.isEmpty ? "Untitled" : newPDFTitle
+            newPDF.url = destinationURL.absoluteString // Save the sandboxed file URL
+            newPDF.dog = dog
+
             try viewContext.save()
+            print("PDF copied and saved successfully at \(destinationURL)")
         } catch {
             print("Error saving PDF: \(error.localizedDescription)")
         }
     }
+
+
+
+
+
+
 }
 
 #Preview {

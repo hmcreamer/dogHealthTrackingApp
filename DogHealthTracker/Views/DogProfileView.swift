@@ -218,18 +218,6 @@ struct DogProfileView: View {
                         .padding(.horizontal)
                 }
                 
-                // Navigation Button to Medical Records
-                NavigationLink(destination: MedicalRecordsView(dog: dog)) {
-                    Text("View Medical Records")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                }
-                
             }
             .padding()
             .navigationTitle(dog.name ?? "Dog Profile")
