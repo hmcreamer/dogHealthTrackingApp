@@ -22,7 +22,7 @@ struct PersistenceController {
         let newDog = Dog(context:viewContext)
         newDog.name = "Ollie"
         newDog.birthday = Calendar.current.date(byAdding: .year, value: -7, to: Date())
-        newDog.weight = Int32(25)
+        newDog.weight = Double(25)
         
         let event1 = MedicalEvent(context: viewContext)
          event1.eventDescription = "Rabies Vaccine"

@@ -12,7 +12,7 @@ struct AddDogFormView: View {
     @Binding var isPresented: Bool // Binding to dismiss the form
     
     @State private var dogName: String = ""
-    @State private var weight: Int? = nil
+    @State private var weight: Double? = nil
     @State private var birthday: Date = Date()
     @State private var selectedImage: UIImage? = nil // Store the selected image
     @State private var selectedItem: PhotosPickerItem? = nil // For binding the picker selection
@@ -76,7 +76,7 @@ struct AddDogFormView: View {
     private func addDogProfile() {
         let newDog = Dog(context: viewContext) // Create a new Core Data object
         newDog.name = dogName
-        newDog.weight = Int32(weight ?? 0)
+        newDog.weight = Double(weight ?? 0)
         newDog.birthday = birthday // Convert Int? to Int16
         if let selectedImage = selectedImage {
             newDog.photo = selectedImage.jpegData(compressionQuality: 0.8) // Save the photo as Data

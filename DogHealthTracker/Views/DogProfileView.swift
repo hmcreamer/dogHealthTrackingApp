@@ -16,7 +16,7 @@ struct DogProfileView: View {
     @State private var selectedPhotoItem: PhotosPickerItem? = nil
     @State private var tempPhoto: UIImage? = nil
     @State private var birthday: Date? = nil
-    @State private var weight: Int? = nil
+    @State private var weight: Double? = nil
     private var lastVetVisit: Date? {
         let fetchRequest: NSFetchRequest<MedicalEvent> = MedicalEvent.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "dog == %@ AND type == %@", dog, "Vet Visit")
@@ -106,7 +106,7 @@ struct DogProfileView: View {
                         TextField("Enter Weight", text: Binding(
                             get: { String(dog.weight) },
                             set: { newValue in
-                                if let weightValue = Int32(newValue) {
+                                if let weightValue = Double(newValue) {
                                     dog.weight = weightValue
                                     saveChanges()
                                 }
@@ -337,7 +337,7 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
     let dog = Dog(context: context)
     dog.name = "Layla"
     dog.birthday = Calendar.current.date(byAdding: .year, value: -5, to: Date())
-    dog.weight = Int32(25)
+    dog.weight = Double(25)
     if let image = UIImage(named: "laylaBed"),
        let imageData = image.jpegData(compressionQuality: 0.8) {
         dog.photo = imageData

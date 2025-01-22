@@ -120,7 +120,7 @@ private func createPreviewDog(in context: NSManagedObjectContext) -> Dog {
     let dog = Dog(context: context)
     dog.name = "Layla"
     dog.birthday = Calendar.current.date(byAdding: .year, value: -5, to: Date())
-    dog.weight = Int32(25)
+    dog.weight = Double(25)
     if let image = UIImage(named: "laylaBed"),
        let imageData = image.jpegData(compressionQuality: 0.8) {
         dog.photo = imageData
