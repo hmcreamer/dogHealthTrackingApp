@@ -1,5 +1,4 @@
-![alt text](https://github.com/hmcreamer/dogHealthTrackingApp/blob/main/DogHealthTracker/IMG_9451.JPG?raw=true)
-
+<img src="https://github.com/hmcreamer/dogHealthTrackingApp/blob/main/DogHealthTracker/IMG_9451.JPG?raw=true" alt="Image description" height="300" />
 
 
 # Description
