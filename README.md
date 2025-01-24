@@ -1,4 +1,5 @@
-![Uploading IMG_9451.JPG…]()
+![alt text](https://github.com/hmcreamer/dogHealthTrackingApp/tree/main/DogHealthTracker/IMG_9451.JPG?raw=true)
+
 
 
 # Description
