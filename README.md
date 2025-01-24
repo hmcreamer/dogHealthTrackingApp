@@ -1,3 +1,6 @@
+![Uploading IMG_9451.JPG…]()
+
+
 # Description
 
 I created this app to help track our dogs' medical history. It is pretty easy to forget when we last gave the dogs their flea preventative medicine and heartworm treatment. We also found that the vet does not consistently send reminders for when the dogs need to renew their vaccines or come in for checkups. This app aims to provide an easy way to track the dogs' medical history so we never miss a treatment or vaccine again!
