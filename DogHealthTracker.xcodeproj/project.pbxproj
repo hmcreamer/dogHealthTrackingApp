@@ -34,26 +34,6 @@
 		C37F67AD2CF1419A00496604 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C37F68C02D361B5200496604 /* Exceptions for "DogHealthTracker" folder in "DogHealthTracker" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Data/DogHealthTracker.xcdatamodeld,
-			);
-			target = C37F66CC2CF1328900496604 /* DogHealthTracker */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		C37F68C12D361B5200496604 /* Exceptions for "DogHealthTracker" folder in "Compile Sources" phase from "DogHealthTracker" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = C37F66C92CF1328900496604 /* Sources */;
-			membershipExceptions = (
-				Data/DogHealthTracker.xcdatamodeld,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C37F66E52CF1328B00496604 /* DogHealthTrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -67,10 +47,6 @@
 		};
 		C37F68B22D361B5200496604 /* DogHealthTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				C37F68C02D361B5200496604 /* Exceptions for "DogHealthTracker" folder in "DogHealthTracker" target */,
-				C37F68C12D361B5200496604 /* Exceptions for "DogHealthTracker" folder in "Compile Sources" phase from "DogHealthTracker" target */,
-			);
 			path = DogHealthTracker;
 			sourceTree = "<group>";
 		};
