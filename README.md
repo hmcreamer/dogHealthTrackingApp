@@ -1,4 +1,4 @@
-![alt text](https://github.com/hmcreamer/dogHealthTrackingApp/tree/main/DogHealthTracker/IMG_9451.JPG?raw=true)
+![alt text](https://github.com/hmcreamer/dogHealthTrackingApp/blob/main/DogHealthTracker/IMG_9451.JPG?raw=true)
 
 
 
